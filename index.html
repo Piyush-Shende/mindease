@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindEase - AI Wellness Check-In</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- About Modal -->
+    <div class="modal-overlay hidden" id="aboutModal">
+        <div class="modal about-modal">
+            <h2>About MindEase</h2>
+            <div class="about-content">
+                <p>MindEase is an AI-powered daily wellness check-in companion designed to support emotional awareness and general well-being through thoughtful conversation.</p>
+
+                <div class="about-features">
+                    <div class="about-feature">
+                        <strong>AI Companion</strong>
+                        <span>Powered by Google Gemini with carefully crafted prompt engineering for empathetic, non-medical support.</span>
+                    </div>
+                    <div class="about-feature">
+                        <strong>Mood Tracking</strong>
+                        <span>Track your emotional journey throughout the week with visual mood indicators.</span>
+                    </div>
+                    <div class="about-feature">
+                        <strong>Stress Monitoring</strong>
+                        <span>Log your daily stress level and receive personalized coping suggestions.</span>
+                    </div>
+                    <div class="about-feature">
+                        <strong>Wellness Tools</strong>
+                        <span>Guided breathing exercises, daily affirmations, and a personal journal.</span>
+                    </div>
+                </div>
+
+                <div class="about-tech">
+                    <strong>Built With</strong>
+                    <div class="tech-tags">
+                        <span class="tech-tag">HTML/CSS/JS</span>
+                        <span class="tech-tag">Python Flask</span>
+                        <span class="tech-tag">Google Gemini API</span>
+                        <span class="tech-tag">Prompt Engineering</span>
+                    </div>
+                </div>
+
+                <div class="about-safety">
+                    <strong>Important Notice</strong>
+                    <p>MindEase is not a substitute for professional mental health care. It does not diagnose, treat, or provide medical advice. If you are in crisis, please contact emergency services or a helpline like 988 (Suicide and Crisis Lifeline).</p>
+                </div>
+            </div>
+            <button class="about-close-btn" id="aboutCloseBtn">Close</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">MindEase</h1>
+                <p class="tagline">AI-Powered Wellness Companion</p>
+            </div>
+
+            <div class="mood-checkin">
+                <h3>How are you feeling today?</h3>
+                <div class="mood-buttons">
+                    <button class="mood-btn" data-mood="great" title="Great">
+                        <span class="mood-icon">&#9728;</span>
+                        <span class="mood-label">Great</span>
+                    </button>
+                    <button class="mood-btn" data-mood="good" title="Good">
+                        <span class="mood-icon">&#9729;</span>
+                        <span class="mood-label">Good</span>
+                    </button>
+                    <button class="mood-btn" data-mood="okay" title="Okay">
+                        <span class="mood-icon">&#9730;</span>
+                        <span class="mood-label">Okay</span>
+                    </button>
+                    <button class="mood-btn" data-mood="low" title="Low">
+                        <span class="mood-icon">&#9731;</span>
+                        <span class="mood-label">Low</span>
+                    </button>
+                    <button class="mood-btn" data-mood="struggling" title="Struggling">
+                        <span class="mood-icon">&#127782;</span>
+                        <span class="mood-label">Struggling</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="stress-checkin">
+                <h3>Stress Level</h3>
+                <div class="stress-slider-wrap">
+                    <input type="range" id="stressSlider" min="1" max="10" value="5" class="stress-slider">
+                    <div class="stress-labels">
+                        <span>1 - Calm</span>
+                        <span id="stressValue">5</span>
+                        <span>10 - High</span>
+                    </div>
+                </div>
+                <button class="stress-share-btn" id="stressShareBtn">Share with MindEase</button>
+            </div>
+
+            <div class="mood-tracker">
+                <h3>This Week's Journey</h3>
+                <div class="tracker-grid" id="trackerGrid">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+
+            <div class="daily-affirmation">
+                <h3>Daily Affirmation</h3>
+                <p id="affirmationText"></p>
+            </div>
+
+            <div class="breathing-exercise">
+                <h3>Quick Breathing Exercise</h3>
+                <button class="breathing-btn" id="breathingBtn">Start Breathing</button>
+                <div class="breathing-circle" id="breathingCircle">
+                    <span id="breathingText">Ready</span>
+                </div>
+            </div>
+
+            <div class="journal-section">
+                <h3>Journal History</h3>
+                <div class="journal-list" id="journalList">
+                    <p class="journal-empty">Your journal entries will appear here.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="status-dot"></div>
+                    <span>MindEase AI is here for you</span>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="aboutBtn" title="About MindEase">About</button>
+                    <button class="clear-btn" id="clearChat" title="Start a new conversation">New Chat</button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-message">
+                    <h2>Welcome to MindEase</h2>
+                    <p>I'm an AI-powered wellness companion here to listen and support you through your day. This is a safe, judgment-free space where you can share how you're feeling.</p>
+                    <p>You can start by selecting a mood on the left, or simply tell me what's on your mind.</p>
+                    <div class="quick-prompts">
+                        <button class="prompt-btn" data-prompt="I've been feeling stressed lately and could use some support.">I'm feeling stressed</button>
+                        <button class="prompt-btn" data-prompt="I'm feeling anxious about things and my mind won't stop racing.">I feel anxious</button>
+                        <button class="prompt-btn" data-prompt="I've been feeling lonely and disconnected from people around me.">I feel lonely</button>
+                        <button class="prompt-btn" data-prompt="I had a really good day today and I want to share it!">I had a good day</button>
+                        <button class="prompt-btn" data-prompt="I'm having trouble sleeping and feel tired all the time.">I can't sleep well</button>
+                        <button class="prompt-btn" data-prompt="I just need someone to talk to right now.">I need to talk</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea id="userInput" placeholder="Share what's on your mind..." rows="1"></textarea>
+                    <button class="send-btn" id="sendBtn" title="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="disclaimer">MindEase is not a substitute for professional mental health care. If you are in crisis, please contact emergency services or a helpline.</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="responses.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
